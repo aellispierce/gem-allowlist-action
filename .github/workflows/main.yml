@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to read contents of Gemfile
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Read Gemfile step
         id: read-gemfile
         uses: ./
