@@ -1683,6 +1683,7 @@ const fs = __nccwpck_require__(147)
 async function run() {
   try {
     const gemfile = core.getInput('gemfile');
+    const allowlist = core.getInput('allowlist');
 
     fs.readFile(gemfile, 'utf8', (err, data) => {
       if (err) {
@@ -1692,6 +1693,16 @@ async function run() {
       }
 
       core.info(`Gemfile data: ${data}`)
+    })
+
+    fs.readFile(allowlist, 'utf8', (err, data) => {
+      if (err) {
+        // TODO: Verify how if error in this scope bubbles up to the `try` block
+        console.error(err)
+        return
+      }
+
+      core.info(`Allowlist data: ${data}`)
     })
 
   } catch (error) {
