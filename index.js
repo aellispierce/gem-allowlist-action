@@ -14,7 +14,9 @@ async function run() {
         return
       }
 
-      core.info(`Gemfile data: ${data}`)
+      const array = [...data.matchAll(regexp)].map((innerArr) => innerArr[1]);
+
+      core.info(`List of gems from Gemfile: ${array}`)
     })
 
     fs.readFile(allowlist, 'utf8', (err, data) => {
