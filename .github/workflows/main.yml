@@ -1,0 +1,10 @@
+on: [push]
+
+jobs:
+  read_gemfile:
+    runs-on: ubuntu-latest
+    name: A job to read contents of Gemfile
+    steps:
+      - name: Read Gemfile step
+        id: read-gemfile
+        uses: aellispierce/gem-allowlist-action
