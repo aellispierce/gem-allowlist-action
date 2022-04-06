@@ -1,13 +1,14 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: Gem Allowlist
+description: 'Requests changes on PRs that introduce gems that are not allowed'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  gemfile:  # id of input
+    description: 'the path to file we are checking'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+    default: './Gemfile'
+  allowlist:  # id of input
+    description: 'path to file of allowed gem names'
+    required: true
+    default: './allowlist.csv'
 runs:
   using: 'node16'
   main: 'dist/index.js'
