@@ -7,4 +7,4 @@ jobs:
     steps:
       - name: Read Gemfile step
         id: read-gemfile
-        uses: aellispierce/gem-allowlist-action
+        uses: ./
