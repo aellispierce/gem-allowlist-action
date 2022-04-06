@@ -1705,8 +1705,9 @@ async function run() {
         return
       }
 
-      const list = JSON.parse(data)
-      core.info(`Allowlist data: ${list}`)
+      const obj = JSON.parse(data)
+      core.info(`Allowlist data:`)
+      obj.gems.map(gem => core.info(gem))
     })
 
   } catch (error) {
