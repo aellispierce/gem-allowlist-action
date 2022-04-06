@@ -14,6 +14,7 @@ async function run() {
         return
       }
 
+      const regexp = RegExp(/gem ["|']([^"|']*)["|']/, 'g');
       const array = [...data.matchAll(regexp)].map((innerArr) => innerArr[1]);
 
       core.info(`List of gems from Gemfile: ${array}`)
