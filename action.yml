@@ -8,7 +8,7 @@ inputs:
   allowlist:  # id of input
     description: 'path to file of allowed gem names'
     required: true
-    default: './allowlist.csv'
+    default: './allowlist.json'
 runs:
   using: 'node16'
   main: 'dist/index.js'

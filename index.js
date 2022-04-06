@@ -27,7 +27,8 @@ async function run() {
         return
       }
 
-      core.info(`Allowlist data: ${data}`)
+      const list = JSON.parse(data)
+      core.info(`Allowlist data: ${list}`)
     })
 
   } catch (error) {
