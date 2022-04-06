@@ -5,11 +5,10 @@ const fs = require('fs')
 async function run() {
   try {
     const gemfile = core.getInput('gemfile');
-    core.info(`Waiting ${ms} milliseconds ...`);
 
     fs.readFile(gemfile, 'utf8', (err, data) => {
       if (err) {
-        // TODO: Verify how if error in this scope bubbles up to the `try` block 
+        // TODO: Verify how if error in this scope bubbles up to the `try` block
         console.error(err)
         return
       }
