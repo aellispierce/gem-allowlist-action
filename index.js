@@ -1,18 +1,22 @@
 const core = require('@actions/core');
-const wait = require('./wait');
-
+const fs = require('fs')
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
+    const gemfile = core.getInput('gemfile');
     core.info(`Waiting ${ms} milliseconds ...`);
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    fs.readFile(gemfile, 'utf8', (err, data) => {
+      if (err) {
+        // TODO: Verify how if error in this scope bubbles up to the `try` block 
+        console.error(err)
+        return
+      }
 
-    core.setOutput('time', new Date().toTimeString());
+      core.info(`Gemfile data: ${data}`)
+    })
+
   } catch (error) {
     core.setFailed(error.message);
   }
