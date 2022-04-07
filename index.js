@@ -7,7 +7,7 @@ async function run() {
     const gemfile = core.getInput('gemfile');
     const allowlist = core.getInput('allowlist');
 
-    fs.readFile(gemfile, 'utf8', (err, data) => {
+    const gems = fs.readFile(gemfile, 'utf8', (err, data) => {
       if (err) {
         // TODO: Verify how if error in this scope bubbles up to the `try` block
         console.error(err)
@@ -15,10 +15,12 @@ async function run() {
       }
 
       const regexp = RegExp(/gem ["|']([^"|']*)["|']/, 'g');
-      const array = [...data.matchAll(regexp)].map((innerArr) => innerArr[1]);
+      const array = [...data.matchAll(regexp)].map(innerArr => innerArr[1]);
 
-      core.info(`List of gems from Gemfile: ${array}`)
+      return array
     })
+
+    core.info(`List of gems from Gemfile: ${gems}`)
 
     fs.readFile(allowlist, 'utf8', (err, data) => {
       if (err) {
