@@ -44,10 +44,10 @@ async function run() {
 
     // MVP: Can simply just fail the job if there are any disallowed gems that are found
     // core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
-    const githubToken = core.getInput('GITHUB_TOKEN');
+    const githubToken = core.getInput('githubtoken');
     const context = github.context;
     const pull_request_number = context.payload.pull_request.number;
-    const octokit = github.getOctokit(github_token);
+    const octokit = github.getOctokit(githubToken);
     const message = `Failed due to gems not allowed: ${[...disallowedGems]}`
 
     octokit.rest.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: pull_request_number, body: message }));

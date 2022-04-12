@@ -9,6 +9,10 @@ inputs:
     description: 'path to file of allowed gem names'
     required: true
     default: './allowlist.json'
+  githubtoken: 
+    description: 'the github token'
+    required: true
+    default: ${{ secrets.GH_TOKEN }}
 runs:
   using: 'node16'
   main: 'dist/index.js'
