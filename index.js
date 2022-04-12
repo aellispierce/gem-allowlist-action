@@ -10,6 +10,28 @@ async function run() {
     const gems = getGems();
     const allowedGems = getAllowlist();
 
+    const results = {};
+
+    gems.forEach(gem => {
+      results[gem] = allowedGems.includes(gem);  
+    });
+
+    const failed = Object.values(results).includes(false);
+
+    if (failed) {
+      const disallowedGems = Object.entries(results)
+        .filter(([gemName, isAllowed]) => !isAllowed)
+        .map(([gemName]) => gemName);
+      
+      console.log('not allowed', disallowedGems)
+    }
+    results
+
+    // const results = gems.reduce((data, gem) => {
+    //   return {...data, [gem]: allowedGems.includes(gem)}
+    // }, {})
+    
+    console.log(results);
     console.log(gems)
     console.log(allowedGems)
 
@@ -27,7 +49,7 @@ function getGems(gemfilePath = `${process.cwd()}/Gemfile`) {
 
 function parseGemfile(content) {
   const regexp = RegExp(/gem ["|']([^"|']*)["|']/, 'g');
-  const gems = [...content.matchAll(regexp)].map(innerArr => innerArr[1].toLowerCase());
+  const gems = [...content.matchAll(regexp)].map(innerArr => innerArr[1]);
 
   return gems;
 }
@@ -40,7 +62,7 @@ function getAllowlist(allowlistFilePath = `${process.cwd()}/allowlist.json`) {
 
 function parseAllowlist(content) {
   const data = JSON.parse(content)
-  const gems = data.gems.map(gem => gem.toLowerCase());
+  const gems = data.gems.map(gem => gem);
 
   return gems;
 }
