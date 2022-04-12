@@ -2,6 +2,7 @@
   "gems":
   [
     "Rails",
-    "Rake"
+    "Rake",
+    "github-Authentication"
   ]
 }
