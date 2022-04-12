@@ -7,59 +7,42 @@ async function run() {
     const gemfile = core.getInput('gemfile');
     const allowlist = core.getInput('allowlist');
 
-    // fs.readFile(gemfile, 'utf8', (err, data) => {
-    // const blah = fs.readFile(`${process.cwd()}/Gemfile`, 'utf8', (err, data) => {
-    //   if (err) {
-    //     // TODO: Verify how if error in this scope bubbles up to the `try` block
-    //     console.error(err)
-    //     return
-    //   }
+    const gems = getGems();
+    const allowedGems = getAllowlist();
 
-    //   const regexp = RegExp(/gem ["|']([^"|']*)["|']/, 'g');
-    //   const array = [...data.matchAll(regexp)].map(innerArr => innerArr[1]);
-      
-    //   core.info(`List of gems from Gemfile: ${array}`);
-
-    //   return array;
-    // })
-
-    const gemfileRaw = fs.readFileSync(`${process.cwd()}/Gemfile`, 'utf8');
-    const gems = parseGemfile(gemfileRaw);
-    console.log('aaaa', gems);
-
-    const allowlistRaw = fs.readFileSync(`${process.cwd()}/allowlist.json`, 'utf8');
-    const allowedGems = parseAllowlist(allowlistRaw);
-    console.log('bbbb', allowedGems);
-
-
-    // fs.readFile(allowlist, 'utf8', (err, data) => {
-    //   if (err) {
-    //     // TODO: Verify how if error in this scope bubbles up to the `try` block
-    //     console.error(err)
-    //     return
-    //   }
-
-    //   const obj = JSON.parse(data)
-    //   core.info(`Allowlist data:`)
-    //   obj.gems.map(gem => core.info(gem))
-    // })
+    console.log(gems)
+    console.log(allowedGems)
 
   } catch (error) {
-    core.setFailed(error.message);
+    // core.setFailed(error.message);
+    console.log("error:", error);
   }
+}
+
+function getGems(gemfilePath = `${process.cwd()}/Gemfile`) {
+  const gemfileRaw = fs.readFileSync(gemfilePath, 'utf8');
+
+  return parseGemfile(gemfileRaw);
 }
 
 function parseGemfile(content) {
   const regexp = RegExp(/gem ["|']([^"|']*)["|']/, 'g');
-  const gems = [...content.matchAll(regexp)].map(innerArr => innerArr[1]);
+  const gems = [...content.matchAll(regexp)].map(innerArr => innerArr[1].toLowerCase());
 
   return gems;
 }
 
+function getAllowlist(allowlistFilePath = `${process.cwd()}/allowlist.json`) {
+  const allowlistRaw = fs.readFileSync(allowlistFilePath, 'utf8');
+
+  return parseAllowlist(allowlistRaw);
+}
+
 function parseAllowlist(content) {
   const data = JSON.parse(content)
+  const gems = data.gems.map(gem => gem.toLowerCase());
 
-  return data.gems;
+  return gems;
 }
 
 run();
