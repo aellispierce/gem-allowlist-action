@@ -1555,6 +1555,14 @@ exports.debug = debug; // for test
 
 /***/ }),
 
+/***/ 716:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
+
+
+/***/ }),
+
 /***/ 357:
 /***/ ((module) => {
 
@@ -1677,6 +1685,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(186);
+const github = __nccwpck_require__(716);
 const fs = __nccwpck_require__(747)
 
 // most @actions toolkit packages have async methods
@@ -1718,14 +1727,17 @@ async function run() {
       .filter(([gemName, isAllowed]) => !isAllowed)
       .map(([gemName]) => gemName);
 
-    core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
 
+    // MVP: Can simply just fail the job if there are any disallowed gems that are found
+    // core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
+    const githubToken = core.getInput('GITHUB_TOKEN');
+    const context = github.context;
+    const pull_request_number = context.payload.pull_request.number;
+    const octokit = github.getOctokit(github_token);
+    const message = `Failed due to gems not allowed: ${[...disallowedGems]}`
 
-    // core.info(`Not allowed gems: ${[...disallowedGems]}` );
-    // console.log('not allowed', disallowedGems);
-    // console.log(results);
-    // console.log(gems);
-    // console.log(allowedGems);
+    octokit.rest.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: pull_request_number, body: message }));
+
 
   } catch (error) {
     core.setFailed(error.message);
