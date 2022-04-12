@@ -27,10 +27,10 @@ async function run() {
     gems.forEach(gem => {
       results[gem] = allowedGems.some(allowedGem => {
         return allowedGem.toLowerCase() === gem.toLowerCase();
-      });  
+      });
     });
 
-    // Determine if any of the gems in the `results` object contains a `false` value 
+    // Determine if any of the gems in the `results` object contains a `false` value
     const hasDisallowedGems = Object.values(results).includes(false);
 
     // Early return if all gems are defined in the allowlist
@@ -42,15 +42,7 @@ async function run() {
       .map(([gemName]) => gemName);
 
 
-    // MVP: Can simply just fail the job if there are any disallowed gems that are found
-    // core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
-    const githubToken = core.getInput('githubtoken');
-    const context = github.context;
-    const pull_request_number = context.payload.pull_request.number;
-    const octokit = github.getOctokit(githubToken);
-    const message = `Failed due to gems not allowed: ${[...disallowedGems]}`
-
-    octokit.rest.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: pull_request_number, body: message }));
+    core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
 
 
   } catch (error) {
