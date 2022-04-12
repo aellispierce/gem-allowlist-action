@@ -41,7 +41,7 @@ async function run() {
       .map(([gemName]) => gemName);
     
 
-
+    core.info(`Not allowed gems: ${[...disallowedGems]}` );
     console.log('not allowed', disallowedGems);
     console.log(results);
     console.log(gems);
