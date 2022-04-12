@@ -7,29 +7,27 @@ async function run() {
     const gemfile = core.getInput('gemfile');
     const allowlist = core.getInput('allowlist');
 
-    const gems = getGems();
-    const allowedGems = getAllowlist();
+    const gems = await getGems();
+    const allowedGems = await getAllowlist();
 
     const results = {};
 
     gems.forEach(gem => {
-      results[gem] = allowedGems.includes(gem);  
+      results[gem] = allowedGems.some(allowedGem => {
+        return allowedGem.toLowerCase() === gem.toLowerCase();
+      });  
     });
 
     const failed = Object.values(results).includes(false);
 
-    if (failed) {
-      const disallowedGems = Object.entries(results)
-        .filter(([gemName, isAllowed]) => !isAllowed)
-        .map(([gemName]) => gemName);
-      
-      console.log('not allowed', disallowedGems)
-    }
-    results
+    if (!failed) return;
 
-    // const results = gems.reduce((data, gem) => {
-    //   return {...data, [gem]: allowedGems.includes(gem)}
-    // }, {})
+    const disallowedGems = Object.entries(results)
+      .filter(([gemName, isAllowed]) => !isAllowed)
+      .map(([gemName]) => gemName);
+    
+    console.log('not allowed', disallowedGems)
+    
     
     console.log(results);
     console.log(gems)
@@ -41,8 +39,8 @@ async function run() {
   }
 }
 
-function getGems(gemfilePath = `${process.cwd()}/Gemfile`) {
-  const gemfileRaw = fs.readFileSync(gemfilePath, 'utf8');
+async function getGems(gemfilePath = `${process.cwd()}/Gemfile`) {
+  const gemfileRaw = await fs.promises.readFile(gemfilePath, 'utf8');
 
   return parseGemfile(gemfileRaw);
 }
@@ -54,8 +52,8 @@ function parseGemfile(content) {
   return gems;
 }
 
-function getAllowlist(allowlistFilePath = `${process.cwd()}/allowlist.json`) {
-  const allowlistRaw = fs.readFileSync(allowlistFilePath, 'utf8');
+async function getAllowlist(allowlistFilePath = `${process.cwd()}/allowlist.json`) {
+  const allowlistRaw = await fs.promises.readFile(allowlistFilePath, 'utf8');
 
   return parseAllowlist(allowlistRaw);
 }
