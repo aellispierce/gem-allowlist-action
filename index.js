@@ -39,17 +39,19 @@ async function run() {
     const disallowedGems = Object.entries(results)
       .filter(([gemName, isAllowed]) => !isAllowed)
       .map(([gemName]) => gemName);
-    
 
-    core.info(`Not allowed gems: ${[...disallowedGems]}` );
-    console.log('not allowed', disallowedGems);
-    console.log(results);
-    console.log(gems);
-    console.log(allowedGems);
+    core.setFailed(`Failed due to gems not allowed: ${[...disallowedGems]}`);
+
+
+    // core.info(`Not allowed gems: ${[...disallowedGems]}` );
+    // console.log('not allowed', disallowedGems);
+    // console.log(results);
+    // console.log(gems);
+    // console.log(allowedGems);
 
   } catch (error) {
-    // core.setFailed(error.message);
-    console.log("error:", error);
+    core.setFailed(error.message);
+    // console.log("error:", error);
   }
 }
 
