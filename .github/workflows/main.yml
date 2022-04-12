@@ -6,6 +6,8 @@ jobs:
   read_gemfile:
     runs-on: ubuntu-latest
     name: A job to read contents of Gemfile
+    with:
+      githubtoken: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
